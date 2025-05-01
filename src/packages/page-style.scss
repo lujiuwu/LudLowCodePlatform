@@ -1,0 +1,39 @@
+#editor-page{
+  height: 100vh;
+  padding: 10px;
+  box-sizing: border-box;
+  #outer-container {
+    background-color: #ccc;
+    height: 100%;
+    .component-aside{
+      padding: 10px;
+      &-item{
+        margin-bottom: 10px;
+        height: 90px;
+        background-color: pink;
+        border-bottom: 1px solid red;
+        padding: 10px;
+        .label{
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+
+  #inner-container {
+    background-color: pink;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // 保持居中
+    .main-page{
+      overflow: scroll;
+      background-color: #fff;
+      &-item{
+        height: 40px;
+        background-color: blue;
+      }
+    }
+  }
+}

@@ -1,30 +1,32 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div id="app">
+    <PageEditor v-model="state"></PageEditor>
+  </div>
 </template>
 
 <style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+*{
+  padding: 0;
+  margin: 0;
 }
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+</style>
+<script>
+// 导入总体布局组件
+import PageEditor from './packages/page-editor'
+import { ref, provide } from 'vue'
+import data from './components/data'
+import { registerConfig as config } from './utils/editor-config'
+export default {
+  components: {
+    PageEditor
+  },
+  setup () {
+    const state = ref(data)
+    provide('config', config)
+    return {
+      state
     }
   }
 }
-</style>
+
+</script>

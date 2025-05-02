@@ -3,18 +3,20 @@
   padding: 10px;
   box-sizing: border-box;
   #outer-container {
-    background-color: #ccc;
+
     height: 100%;
     .component-aside{
       padding: 10px;
       &-item{
         margin-bottom: 10px;
         height: 90px;
-        background-color: pink;
         border-bottom: 1px solid red;
         padding: 10px;
         .label{
           margin-bottom: 5px;
+        }
+        .component{
+          background-color: transparent;
         }
       }
     }
@@ -28,11 +30,16 @@
     justify-content: center;
     // 保持居中
     .main-page{
+      position: relative;
       overflow: scroll;
       background-color: #fff;
       &-item{
         height: 40px;
-        background-color: blue;
+        position: absolute;
+      }
+      &-item--focus {
+        border: 1px dotted red;
+        position: absolute;
       }
     }
   }

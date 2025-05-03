@@ -28,6 +28,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    .header{
+      background-color: yellow;
+      width: 100%;
+      padding: 10px;
+      &-menu-btn{
+        background-color: #fff;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+        border: 1px solid pink;
+      }
+    }
     // 保持居中
     .main-page{
       position: relative;
@@ -41,6 +53,20 @@
         border: 1px dotted red;
         position: absolute;
       }
+      .line-x {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        border-left: 1px dashed red;
+      }
+
+      .line-y {
+        position: absolute;
+        left: 0;
+        right: 0;
+        border-top: 1px dashed red;
+      }
     }
+
   }
 }

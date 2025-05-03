@@ -27,6 +27,9 @@ export default defineComponent({
         currentBlock.value.top = currentBlock.value.top - offsetHeight / 2
         currentBlock.value.alignCenter = false
       }
+      // 在渲染完成之后，就需要给元素添加宽高属性
+      currentBlock.value.width = offsetWidth
+      currentBlock.value.height = offsetHeight
     })
     return () => (
       <div draggable ref={blockRef} style={componentStyle.value}>{component.render()}</div>

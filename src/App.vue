@@ -14,7 +14,7 @@
 // 导入总体布局组件
 import PageEditor from './packages/page-editor'
 import { ref, provide } from 'vue'
-import data from './components/data'
+import data from './data'
 import { registerConfig as config } from './utils/editor-config'
 export default {
   components: {

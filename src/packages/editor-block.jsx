@@ -16,7 +16,8 @@ export default defineComponent({
     const component = config.componentMap.get(currentBlock.value.key)
     const componentStyle = computed(() => ({
       top: currentBlock.value.top + 'px',
-      left: currentBlock.value.left + 'px'
+      left: currentBlock.value.left + 'px',
+      zIndex: currentBlock.value.zIndex
     }))
     const blockRef = ref(null)
     // 渲染完毕后需要居中显示

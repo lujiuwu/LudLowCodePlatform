@@ -13,8 +13,8 @@ export function useCommand (data) {
   // 注册函数
   const register = (command) => {
     state.commandsArray.push(command)
-    state.commandsMap.set(command.name, () => {
-      const { redo, undo } = command.execute()
+    state.commandsMap.set(command.name, (...args) => {
+      const { redo, undo } = command.execute(...args)
       redo()
       // 把需要的操作放入队列
       if (!command.isPushQueue) return
@@ -27,6 +27,7 @@ export function useCommand (data) {
       state.current = current + 1
     })
   }
+  // 撤销方法
   register({
     name: '撤销',
     keyboard: 'ctrl+z',
@@ -44,7 +45,7 @@ export function useCommand (data) {
       }
     }
   })
-  // 修改重做命令
+  // 重做方法
   register({
     name: '重做',
     keyboard: 'ctrl+y',
@@ -61,7 +62,23 @@ export function useCommand (data) {
       }
     }
   })
-
+  // 更新方法 -- 导入导出时触发
+  register({
+    // 更新整个容器
+    name: 'updateContainer',
+    isPushQueue: true,
+    execute (newValue) {
+      const state = { before: data.value, after: newValue }
+      return {
+        redo: () => {
+          data.value = state.after
+        },
+        undo: () => {
+          data.value = state.before
+        }
+      }
+    }
+  })
   // 修改drag命令的execute
   register({
     name: 'drag',
@@ -92,6 +109,74 @@ export function useCommand (data) {
       }
     }
   })
+  // 置顶
+  register({
+    name: 'toTop',
+    isPushQueue: true,
+    execute (BlocksObj) {
+      // 获取当前选中的元素
+      const { focusBlocks, unfocusBlocks } = BlocksObj.value
+      const topIndex = unfocusBlocks.reduce((prev, block) => { return Math.max(prev, block.zIndex) }, -Infinity)
+      // 保存修改前的z-index，以便撤销
+      const originalZIndices = focusBlocks.map(block => block.zIndex)
+
+      // 修改z-index
+      focusBlocks.forEach(block => { block.zIndex = topIndex + 1 })
+      return {
+        redo: () => {
+          focusBlocks.forEach(block => { block.zIndex = topIndex + 1 })
+        },
+        undo: () => {
+          focusBlocks.forEach((block, index) => {
+            block.zIndex = originalZIndices[index]
+          })
+        }
+      }
+    }
+  })
+  // 置底
+  register({
+    name: 'toBottom',
+    isPushQueue: true,
+    execute (BlocksObj) {
+      // 获取当前选中的元素
+      const { focusBlocks, unfocusBlocks } = BlocksObj.value
+      const bottomIndex = unfocusBlocks.reduce((prev, block) => { return Math.min(prev, block.zIndex) }, Infinity)
+      // 保存修改前的z-index，以便撤销
+      const originalZIndices = focusBlocks.map(block => block.zIndex)
+
+      // 修改z-index
+      focusBlocks.forEach(block => { block.zIndex = bottomIndex - 1 })
+      return {
+        redo: () => {
+          focusBlocks.forEach(block => { block.zIndex = bottomIndex - 1 })
+        },
+        undo: () => {
+          focusBlocks.forEach((block, index) => {
+            block.zIndex = originalZIndices[index]
+          })
+        }
+      }
+    }
+  })
+  // 删除
+  register({
+    name: 'delete',
+    isPushQueue: true,
+    execute (BlocksObj) {
+      const { unfocusBlocks } = BlocksObj.value
+      const state = {
+        before: JSON.parse(JSON.stringify(data.value.blocks)),
+        after: unfocusBlocks
+      }
+      console.log(state.after)
+      return {
+        redo: () => { data.value.blocks = state.after },
+        undo: () => { data.value.blocks = state.before }
+      }
+    }
+  })
+  // 监控键盘 -- 快捷键操作
   function keyboardEvent () {
     const keyCodes = {
       90: 'z',

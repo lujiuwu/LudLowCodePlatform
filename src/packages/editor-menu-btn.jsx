@@ -6,8 +6,8 @@ export default defineComponent({
   },
   setup (props) {
     return () => (
-      <ElCol span={4} onClick={props.btnInfo.handler}>
-        {props.btnInfo.label}
+      <ElCol span={2} onClick={props.btnInfo.handler}>
+        {typeof props.btnInfo.label === 'function' ? props.btnInfo.label() : props.btnInfo.label}
       </ElCol>
     )
   }

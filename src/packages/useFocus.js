@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 
-export function useFocus (data, callback) {
+export function useFocus (data, isPreview, menuShow, callback) {
   // 当前点击的元素
   const currentSelectedBlock = ref(-1)
   // 初始值为-1 表示没有任何元素被选中
@@ -11,6 +11,8 @@ export function useFocus (data, callback) {
   }
   // 内部拖拽
   function BlockMouseDown (e, block, index) {
+    if (isPreview.value) return
+
     // 阻止默认效果
     e.preventDefault()
     e.stopPropagation()
@@ -38,6 +40,8 @@ export function useFocus (data, callback) {
   })
   // 点击外部容器 -- 清空所有选中
   function OuterMouseDown () {
+    if (!menuShow.value) menuShow.value = true
+    if (isPreview.value) return
     ClearBlockFocus()
     currentSelectedBlock.value = -1
   }
@@ -45,6 +49,7 @@ export function useFocus (data, callback) {
     BlockMouseDown,
     BlocksObj,
     OuterMouseDown,
-    LastSelectedBlock
+    LastSelectedBlock,
+    ClearBlockFocus
   }
 }

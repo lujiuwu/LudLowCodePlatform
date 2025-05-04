@@ -23,6 +23,7 @@ export function useMenuDragger (containerRef, data) {
         label: currentComponent.label,
         text: currentComponent.text,
         key: currentComponent.key,
+        index: 1,
         alignCenter: true
       }])
     }

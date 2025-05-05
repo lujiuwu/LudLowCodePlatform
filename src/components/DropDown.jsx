@@ -1,4 +1,16 @@
-import { createVNode, defineComponent, reactive, render, computed, onMounted, ref, onBeforeUnmount } from 'vue'
+import { provide, inject, createVNode, defineComponent, reactive, render, computed, onMounted, ref, onBeforeUnmount } from 'vue'
+export const DropDownItem = defineComponent({
+  props: {
+    label: String
+  },
+  setup (props) {
+    // 子组件接收这个方法
+    const hideDropdown = inject('hideDropdown')
+    return () => <div class='dropdown-item' onClick={hideDropdown}>
+      <span>{props.label}</span>
+    </div>
+  }
+})
 const DropDownComponent = defineComponent({
   name: 'DropDownComponent',
   props: {
@@ -21,6 +33,8 @@ const DropDownComponent = defineComponent({
         state.left = left
       }
     })
+    // 向父组件暴露一个隐藏方法
+    provide('hideDropdown', () => { state.isShow = false })
     const classes = computed(() => [
       'dropdown',
       {
@@ -43,7 +57,9 @@ const DropDownComponent = defineComponent({
     })
     const elRef = ref(null)
     return () => {
-      return <div class={classes.value} style={positionStyle.value} ref={elRef}>菜单</div>
+      return <div class={classes.value} style={positionStyle.value} ref={elRef}>
+        {state.option.content()}
+      </div>
     }
   }
 })

@@ -11,7 +11,8 @@ import { useFocus } from './useFocus'
 import { useBlockDrag } from './useBlockDrag'
 import { useCommand } from './useCommand'
 import { $dialog } from '@/components/Dialog'
-import { $dropdown } from '@/components/DropDown'
+import { $dropdown, DropDownItem } from '@/components/DropDown'
+import EditorOperator from './editor-operator'
 export default defineComponent({
   props: {
     modelValue: { type: Object }
@@ -25,7 +26,34 @@ export default defineComponent({
     function onContextMenuBlock (e, block) {
       e.preventDefault()
       $dropdown({
-        el: e.target
+        el: e.target,
+        content: () => {
+          return <>
+            <DropDownItem label='删除' onClick={() => { commandsMap.get('delete')(BlocksObj) }}></DropDownItem>
+            <DropDownItem label='置顶' onClick={() => { commandsMap.get('toTop')(BlocksObj) }}></DropDownItem>
+            <DropDownItem label='置底' onClick={() => { commandsMap.get('toBottom')(BlocksObj) }}></DropDownItem>
+            <DropDownItem label='查看' onClick={() => {
+              // 查看弹出框
+              $dialog({
+                title: '查看',
+                content: JSON.stringify(block),
+                footer: false
+              })
+            }}></DropDownItem>
+            <DropDownItem label='导入' onClick={() => {
+              // 查看弹出框
+              $dialog({
+                title: '导入',
+                content: JSON.stringify(block),
+                footer: true,
+                onConfirm: (text) => {
+                  // 要记录这里的操作
+                  commandsMap.get('updateBlock')(JSON.parse(text), block)
+                }
+              })
+            }}></DropDownItem>
+          </>
+        }
       })
     }
     // 计算显示区域的宽高
@@ -56,13 +84,11 @@ export default defineComponent({
         handler: () => {
           $dialog({
             title: '导入json',
-            content: '222',
-            // 使用json方法
+            content: '', // 初始内容
+            footer: true, // 显示确认/取消按钮
             onConfirm: (text) => {
-              console.log(text)
-              data.value = JSON.parse(text)
-              // 要记录这里的操作
-              commandsMap.get('updateContainer')(JSON.parse(text))
+              const data = JSON.parse(text)
+              commandsMap.get('updateContainer')(data)
             }
           })
         }
@@ -70,7 +96,11 @@ export default defineComponent({
       {
         label: '导出',
         handler: () => {
-          $dialog({ title: '导出json', content: JSON.stringify(data.value) })
+          $dialog({
+            title: '导出json',
+            content: JSON.stringify(data.value),
+            footer: false
+          })
         }
 
       },
@@ -157,7 +187,14 @@ export default defineComponent({
               </div>
             </ElMain>
           </ElContainer>
-          <ElAside v-show={menuShow.value} width="250px">组件样式</ElAside>
+          <ElAside v-show={menuShow.value} width="250px">
+            <EditorOperator
+            block={LastSelectedBlock.value}
+            v-model:data={data.value}
+              updateContainer={commandsMap.get('updateContainer')}
+              updateBlock={commandsMap.get('updateBlock')}
+            ></EditorOperator>
+          </ElAside>
         </ElContainer>
       </div>
     )

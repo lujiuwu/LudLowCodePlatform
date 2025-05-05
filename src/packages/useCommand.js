@@ -79,6 +79,31 @@ export function useCommand (data) {
       }
     }
   })
+  // 更新单个组件
+  register({
+    // 更新整个容器
+    name: 'updateBlock',
+    isPushQueue: true,
+    execute (newBlock, oldBlock) {
+      const state = {
+        before: data.value.blocks,
+        after: (() => {
+          const blocks = [...data.value.blocks]
+          const index = data.value.blocks.indexOf(oldBlock)
+          if (index > -1) { blocks.splice(index, 1, newBlock) }
+          return blocks
+        })()
+      }
+      return {
+        redo: () => {
+          data.value = { ...data.value, blocks: state.after }
+        },
+        undo: () => {
+          data.value = { ...data.value, blocks: state.before }
+        }
+      }
+    }
+  })
   // 修改drag命令的execute
   register({
     name: 'drag',

@@ -13,7 +13,7 @@ export default defineComponent({
       }
     })
     const config = inject('config')
-    const component = config.componentMap.get(currentBlock.value.key)
+
     const componentStyle = computed(() => ({
       top: currentBlock.value.top + 'px',
       left: currentBlock.value.left + 'px',
@@ -32,8 +32,19 @@ export default defineComponent({
       currentBlock.value.width = offsetWidth
       currentBlock.value.height = offsetHeight
     })
-    return () => (
-      <div draggable ref={blockRef} style={componentStyle.value}>{component.render()}</div>
-    )
+    return () => {
+      const component = config.componentMap.get(currentBlock.value.key)
+      if (!component) return null
+
+      // 确保传递完整的props对象
+      const componentProps = props.block.props
+
+      const RenderComponent = component.render(componentProps)
+      return (
+    <div draggable ref={blockRef} style={componentStyle.value}>
+      {RenderComponent}
+    </div>
+      )
+    }
   }
 })

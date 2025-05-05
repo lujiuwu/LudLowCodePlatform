@@ -20,11 +20,15 @@ export function useMenuDragger (containerRef, data) {
       blocks: data.value.blocks.concat([{
         top: e.offsetY,
         left: e.offsetX,
-        label: currentComponent.label,
-        text: currentComponent.text,
         key: currentComponent.key,
         index: 1,
-        alignCenter: true
+        alignCenter: true,
+        props: {
+
+        },
+        model: {
+
+        }
       }])
     }
     currentComponent = null

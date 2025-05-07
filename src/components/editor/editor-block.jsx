@@ -43,7 +43,6 @@ export default defineComponent({
     return () => {
       const component = config.componentMap.get(currentBlock.value.key)
       if (!component) return null
-      console.log('editor-block', currentBlock.value)
       const renderProps = {
         // 新增size属性
         size: props.block.hasResize ? { width: props.block.width, height: props.block.height } : {},

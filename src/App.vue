@@ -12,10 +12,10 @@
 </style>
 <script>
 // 导入总体布局组件
-import PageEditor from './packages/page-editor'
-import { ref, provide } from 'vue'
+import PageEditor from '@/views/page-editor'
+import { ref, provide, onMounted } from 'vue'
 import data from './data'
-import { registerConfig as config } from './utils/editor-config'
+import { registerConfig as config } from '@/utils/editor-config'
 export default {
   components: {
     PageEditor
@@ -27,6 +27,9 @@ export default {
     const formData = ref({
       username: 'lujiuwu',
       password: '111'
+    })
+    onMounted(() => {
+      window.document.documentElement.setAttribute('data-skin', 'default-theme')
     })
     return {
       state,

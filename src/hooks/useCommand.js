@@ -1,5 +1,5 @@
 import { onUnmounted } from 'vue'
-import { events } from './events'
+import { events } from '@/packages/events'
 
 export function useCommand (data) {
   // 命令函数

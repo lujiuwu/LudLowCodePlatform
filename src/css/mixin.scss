@@ -1,0 +1,31 @@
+// mixin.scss
+@use "sass:map";
+@use "./themes" as *; // 导入主题变量
+
+@mixin get-bg-color($color) {
+  @each $theme-name, $theme in $themes {
+    [data-skin="#{$theme-name}"] & {
+      background-color: map.get($theme, $color);
+    }
+  }
+}
+@mixin get-font-color($color) {
+  @each $theme-name, $theme in $themes {
+    [data-skin="#{$theme-name}"] & {
+      color: map.get($theme, $color);
+    }
+  }
+}
+@mixin get-border($width, $type, $color, $direction: null) {
+  @each $theme-name, $theme in $themes {
+    [data-skin="#{$theme-name}"] & {
+      @if $direction {
+        border-#{$direction}: #{$width} #{$type} map.get($theme, $color);
+      }
+
+      @else {
+        border: #{$width} #{$type} map.get($theme, $color);
+      }
+    }
+  }
+}

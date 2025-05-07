@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import { events } from './events'
+import { events } from '@/packages/events'
 
 export function useBlockDrag (BlocksObj, LastSelectedBlock, containerRef) {
   const dragState = {

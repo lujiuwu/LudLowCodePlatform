@@ -1,6 +1,6 @@
 import { defineComponent, inject, watch, reactive } from 'vue'
 import { ElForm, ElFormItem, ElInputNumber, ElButton, ElInput, ElSelect, ElOption, ElColorPicker } from 'element-plus'
-import TableEditor from './table-editor'
+import TableEditor from '@/components/editor/table-editor'
 
 export default defineComponent({
   props: {
@@ -31,7 +31,8 @@ export default defineComponent({
       const container = []
       if (!props.block) {
         container.push(
-        <ElFormItem label="容器宽度">
+          <ElFormItem >
+            <span class='label'>容器宽度</span>
           <ElInputNumber
             v-model={state.editData.width}
             step={5}
@@ -39,7 +40,8 @@ export default defineComponent({
         </ElFormItem>
         )
         container.push(
-        <ElFormItem label="容器高度">
+          <ElFormItem>
+            <span class='label'>容器高度</span>
           <ElInputNumber
             v-model={state.editData.height}
             step={5}
@@ -51,7 +53,8 @@ export default defineComponent({
         if (component && component.props) {
           container.push(
             Object.entries(component.props).map(([propName, propConfig]) => {
-              return <ElFormItem label={propConfig.label}>
+              return <ElFormItem >
+                <span class='label'>{propConfig.label}</span>
                 {{
                   input: () => <ElInput v-model={state.editData.props[propName]}></ElInput>,
                   color: () => <ElColorPicker v-model={state.editData.props[propName]}></ElColorPicker>,
@@ -81,12 +84,12 @@ s
       }
       return (
         <ElForm labelPosition="top">
-      {container}
-      <ElFormItem>
-        <ElButton type="primary" onClick={() => onApply()}>应用</ElButton>
-        <ElButton onClick={reset}>重置</ElButton>
-      </ElFormItem>
-    </ElForm>)
+          {container}
+          <ElFormItem>
+            <ElButton type="primary" onClick={() => onApply()}>应用</ElButton>
+            <ElButton onClick={reset}>重置</ElButton>
+          </ElFormItem>
+        </ElForm>)
     }
   }
 })

@@ -41,7 +41,6 @@ export default defineComponent({
       block.value.width = width
       block.value.height = height
       block.value.hasResize = true
-      console.log('new', block.value)
     }
     function MouseupFunction () {
       document.body.removeEventListener('mousemove', MousemoveFunction)

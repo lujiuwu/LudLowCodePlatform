@@ -1,5 +1,5 @@
 
-import { $tableDialog } from '@/components/TableDialog'
+import { $tableDialog } from '@/components/editor/TableDialog'
 import { ElButton, ElTag } from 'element-plus'
 import { computed, defineComponent } from 'vue'
 

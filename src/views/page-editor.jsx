@@ -1,18 +1,20 @@
 import { computed, defineComponent, inject, ref } from 'vue'
 // element-plus布局组件
 import { ElHeader, ElAside, ElMain, ElContainer, ElRow } from 'element-plus'
-import './page-style.scss'
 // 导入单个组件
-import EditorBlock from './editor-block'
-import EditorMenuBtn from './editor-menu-btn'
+import EditorBlock from '@/components/editor/editor-block'
+import EditorMenuBtn from '@/components/editor/editor-menu-btn'
 // 导入方法
-import { useMenuDragger } from './useMenuDragger'
-import { useFocus } from './useFocus'
-import { useBlockDrag } from './useBlockDrag'
-import { useCommand } from './useCommand'
-import { $dialog } from '@/components/Dialog'
-import { $dropdown, DropDownItem } from '@/components/DropDown'
-import EditorOperator from './editor-operator'
+import { useMenuDragger } from '@/hooks/useMenuDragger'
+import { useFocus } from '@/hooks/useFocus'
+import { useBlockDrag } from '@/hooks/useBlockDrag'
+import { useCommand } from '@/hooks/useCommand'
+import { $dialog } from '@/components/editor/Dialog'
+import { $dropdown, DropDownItem } from '@/components/editor/DropDown'
+// 导入组件
+import EditorOperator from '@/components/operator/editor-operator'
+import ThemeSelect from '@/components/editor/ThemeSelect'
+
 export default defineComponent({
   props: {
     modelValue: { type: Object },
@@ -122,7 +124,7 @@ export default defineComponent({
         }
       }
     ]
-    // 传递组件列表到子组件
+
     const componentList = inject('config').componentList
     // 渲染页面ref
     const containerRef = ref(null)
@@ -134,37 +136,43 @@ export default defineComponent({
     })
     const { InnerMouseDown, markLine } = useBlockDrag(BlocksObj, LastSelectedBlock, containerRef)
     return () => (
-      <div id="editor-page">
-        <ElContainer id="outer-container">
-          <ElAside v-show={menuShow.value} width="250px" class="component-aside">
+      <div id="pageEditor">
+        <ElContainer class="outer-content main-color">
+          <ElAside v-show={menuShow.value} width="250px" class="outer-content__component-aside aside-color">
             {componentList.map(component => (
               <div
-                class="component-aside-item"
+                class="outer-content__component-aside__item"
               >
-                <div class="label">{component.label}</div>
+                <div class="outer-content__component-aside__item__label">
+                  {component.label}
+                </div>
                 <div
-                  class="component"
+                  class="outer-content__component-aside__item__component"
                   draggable
                   onDragstart={e => DragFunction(e, component)}
                   onDragend={e => DragEndFunction(e, component)}
-                >{component.preview()}</div>
+                >
+                  {component.preview()}
+                </div>
               </div>
             ))}
           </ElAside>
-          <ElContainer id="inner-container">
-            <ElHeader v-show={menuShow.value} class="header" height="40px">
+          <ElContainer class="inner-content box-color">
+            <ElHeader v-show={menuShow.value} class="inner-content__header" height="45px">
               {/* 菜单区域 */}
-              <ElRow gutter={10}>
+              <ElRow class='inner-content__header__menu'>
                 {
                  menuBtns.map(btnInfo => (
-                     <EditorMenuBtn class="header-menu-btn" btnInfo={btnInfo}></EditorMenuBtn>
+                     <EditorMenuBtn class='inner-content__header__menu__btn' btnInfo={btnInfo}></EditorMenuBtn>
                  ))
                 }
+              {/* 换肤按钮 -- 单独 */}
+              <ThemeSelect class='inner-content__header__theme-select'></ThemeSelect>
               </ElRow>
             </ElHeader>
             <ElMain>
               <div
-                class="main-page"
+                class="inner-content__main"
                 style={pageStyle.value}
                 ref={containerRef}
                 onMousedown={OuterMouseDown}
@@ -177,22 +185,23 @@ export default defineComponent({
                       formData = {props.formData}
                       block={block}
                       onMousedown={e => BlockMouseDown(e, block, index)}
-                      class={block.focus ? 'main-page-item--focus' : 'main-page-item'}
+                      class={['inner-content__main__block', block.focus ? 'inner-content__main__item--focus' : 'inner-content__main__item']}
                       onContextmenu = {e => onContextMenuBlock(e, block)}
                     ></EditorBlock>
                   )
                   ))
                 }
                 {/* 渲两根线 */}
-              {markLine.x !== null && <div class="line-x" style={{ left: markLine.x + 'px' }}></div>}
-              {markLine.y !== null && <div class="line-y" style={{ top: markLine.y + 'px' }}></div>}
+              {markLine.x !== null && <div class="inner-content__main__line-X" style={{ left: markLine.x + 'px' }}></div>}
+              {markLine.y !== null && <div class="inner-content__main__line-Y" style={{ top: markLine.y + 'px' }}></div>}
               </div>
             </ElMain>
           </ElContainer>
-          <ElAside v-show={menuShow.value} width="250px">
+          <ElAside v-show={menuShow.value} width="250px" class='outer-content__operator-aside aside-color'>
             <EditorOperator
-            block={LastSelectedBlock.value}
-            v-model:data={data.value}
+              class='outer-content__operator-aside__form'
+              block={LastSelectedBlock.value}
+              v-model:data={data.value}
               updateContainer={commandsMap.get('updateContainer')}
               updateBlock={commandsMap.get('updateBlock')}
             ></EditorOperator>

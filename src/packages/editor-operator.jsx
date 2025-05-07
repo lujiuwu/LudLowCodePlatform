@@ -52,23 +52,31 @@ export default defineComponent({
           container.push(
             Object.entries(component.props).map(([propName, propConfig]) => {
               return <ElFormItem label={propConfig.label}>
-              {{
-                input: () => <ElInput v-model={state.editData.props[propName]}></ElInput>,
-                color: () => <ElColorPicker v-model={state.editData.props[propName]}></ElColorPicker>,
-                selector: () =>
-                  <ElSelect v-model={state.editData.props[propName]}>
-                    {propConfig.options.map(option => {
-                      return <ElOption label={option.label} value={option.value}></ElOption>
-                    })}
-                  </ElSelect>,
-                table: () => <TableEditor>
-
+                {{
+                  input: () => <ElInput v-model={state.editData.props[propName]}></ElInput>,
+                  color: () => <ElColorPicker v-model={state.editData.props[propName]}></ElColorPicker>,
+                  selector: () =>
+                    <ElSelect v-model={state.editData.props[propName]}>
+                      {propConfig.options.map(option => {
+                        return <ElOption label={option.label} value={option.value}></ElOption>
+                      })}
+                    </ElSelect>,
+                  table: () => <TableEditor propConfig={propConfig} v-model={state.editData.props[propName]}>
+s
                   </TableEditor>
 
-              }[propConfig.type]()}
+                }[propConfig.type]()}
             </ElFormItem>
             })
           )
+        }
+        // 双向数据绑定
+        if (component && component.model) {
+          container.push(Object.entries(component.model).map(([modelName, label]) => {
+            return <ElFormItem label={label}>
+              <ElInput v-model={state.editData.model[modelName]}></ElInput>
+            </ElFormItem>
+          }))
         }
       }
       return (

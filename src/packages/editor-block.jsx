@@ -1,15 +1,23 @@
 import { computed, defineComponent, inject, onMounted, ref } from 'vue'
+import BlockResize from './block-resize'
 
 // 渲染单个组件
 export default defineComponent({
   props: {
-    block: { type: Object }
+    block: { type: Object },
+    formData: { type: Object }
   },
   setup (props, ctx) {
     const currentBlock = computed({
       get: () => props.block,
       set: (newValue) => {
         ctx.emit('update:block', newValue)
+      }
+    })
+    const currentFormData = computed({
+      get: () => props.formData,
+      set: (newValue) => {
+        ctx.emit('update:formData', newValue)
       }
     })
     const config = inject('config')
@@ -35,14 +43,30 @@ export default defineComponent({
     return () => {
       const component = config.componentMap.get(currentBlock.value.key)
       if (!component) return null
-
-      // 确保传递完整的props对象
-      const componentProps = props.block.props
-
-      const RenderComponent = component.render(componentProps)
+      console.log('editor-block', currentBlock.value)
+      const renderProps = {
+        // 新增size属性
+        size: props.block.hasResize ? { width: props.block.width, height: props.block.height } : {},
+        props: props.block.props,
+        model: Object.keys(component.model || {}).reduce((prev, modelName) => {
+          const propName = currentBlock.value.model[modelName]
+          prev[modelName] = {
+            modelValue: currentFormData.value[propName],
+            'onUpdate:modelValue': v => {
+              currentFormData.value[propName] = v
+            }
+          }
+          return prev
+        }, {})
+      }
+      const RenderComponent = component.render(renderProps)
+      const { width, height } = component.resize || {}
       return (
     <div draggable ref={blockRef} style={componentStyle.value}>
-      {RenderComponent}
+          {RenderComponent}
+          {/* 根据配置信息添加锚点 */}
+          {props.block.focus && (width || height) && <BlockResize class='block-resize' block={props.block} component={component}>
+          </BlockResize>}
     </div>
       )
     }

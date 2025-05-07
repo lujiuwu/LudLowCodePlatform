@@ -1,5 +1,4 @@
 import { events } from './events'
-
 export function useMenuDragger (containerRef, data) {
   // 当前拖拽的元素
   let currentComponent = null
@@ -21,7 +20,7 @@ export function useMenuDragger (containerRef, data) {
         top: e.offsetY,
         left: e.offsetX,
         key: currentComponent.key,
-        index: 1,
+        zIndex: 1,
         alignCenter: true,
         props: {
 

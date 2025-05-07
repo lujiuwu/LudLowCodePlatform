@@ -194,7 +194,6 @@ export function useCommand (data) {
         before: JSON.parse(JSON.stringify(data.value.blocks)),
         after: unfocusBlocks
       }
-      console.log(state.after)
       return {
         redo: () => { data.value.blocks = state.after },
         undo: () => { data.value.blocks = state.before }
@@ -209,7 +208,6 @@ export function useCommand (data) {
     }
     const onKeyDown = (e) => {
       const { ctrlKey, keyCode } = e
-      console.log(ctrlKey, keyCode)
       let keyString = []
       if (ctrlKey) keyString.push('ctrl')
       keyString.push(keyCodes[keyCode])

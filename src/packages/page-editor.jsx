@@ -15,7 +15,8 @@ import { $dropdown, DropDownItem } from '@/components/DropDown'
 import EditorOperator from './editor-operator'
 export default defineComponent({
   props: {
-    modelValue: { type: Object }
+    modelValue: { type: Object },
+    formData: { type: Object }
   },
   setup (props, ctx) {
     // 预览标识 -- 预览时无法点击组件
@@ -146,7 +147,7 @@ export default defineComponent({
                   draggable
                   onDragstart={e => DragFunction(e, component)}
                   onDragend={e => DragEndFunction(e, component)}
-                >{component.render()}</div>
+                >{component.preview()}</div>
               </div>
             ))}
           </ElAside>
@@ -173,6 +174,7 @@ export default defineComponent({
                 {
                   (data.value.blocks.map((block, index) => (
                     <EditorBlock
+                      formData = {props.formData}
                       block={block}
                       onMousedown={e => BlockMouseDown(e, block, index)}
                       class={block.focus ? 'main-page-item--focus' : 'main-page-item'}

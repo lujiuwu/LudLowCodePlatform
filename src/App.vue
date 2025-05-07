@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <PageEditor v-model="state"></PageEditor>
+    <PageEditor v-model="state" :formData="formData"></PageEditor>
   </div>
 </template>
 
@@ -23,8 +23,14 @@ export default {
   setup () {
     const state = ref(data)
     provide('config', config)
+    // 预设可绑定字段
+    const formData = ref({
+      username: 'lujiuwu',
+      password: '111'
+    })
     return {
-      state
+      state,
+      formData
     }
   }
 }

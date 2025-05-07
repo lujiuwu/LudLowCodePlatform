@@ -5,37 +5,25 @@
   },
   "blocks":[
     {
-      "key":"text",
-      "top":20,
-      "left":30,
-      "zIndex":1,
-      "props":{
-        "text":"文本信息",
-        "size":"14px",
-        "color":"red"
-      }
-    },
-    {
       "key":"button",
-      "top":40,
-      "left":40,
+      "top":30,
+      "left":30,
       "zIndex":2,
       "props":{
-        "text":"按钮内容",
-        "buttonType":"primary",
-        "buttonSize":"default",
-        "color":"pink"
+        "text":"按钮文本",
+        "type":"primary",
+        "size":"default"
       }
     },
-    {
-      "key":"input",
-      "top":50,
-      "left":50,
-      "zIndex":3,
-      "model":{},
+     {
+      "key":"text",
+      "top":60,
+      "left":60,
+      "zIndex":1,
       "props":{
-        "text":"",
-        "size":"default"
+        "text":"我的文本",
+        "color":"pink",
+        "size":16
       }
     }
   ]

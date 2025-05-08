@@ -1,2 +1,0 @@
-# LudLowCodePlatform
-LowCode Platform

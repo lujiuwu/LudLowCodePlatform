@@ -1,12 +1,14 @@
 $themes:(
   'default-theme':(
-    'head-color':#5E454B,
-    'main-color':#C9FDD7,
-    'box-color':#FDFFE7,
-    'line-color':#8C7676,
-    'aside-color':#58433A,
-    'btn-color':#99F0CA,
-    'font-color':#58433A
+    'head-color':#fff,
+    'main-color':#dee7f1,
+    'block-color':#F8FAFC,
+    'box-color':#fff,
+    'border-color':#ccd9e6,
+    'line-color':#202020,
+    'aside-color':#fff,
+    'btn-color':#dee7f1,
+    'font-color':#4a4a4a
   ),
   'candy-theme':(
     'head-color':#C599B6,
@@ -26,5 +28,13 @@ $themes:(
     'aside-color':#262730,
     'btn-color':#50577A,
     'font-color':#fff
-  )
+  ),
+  'mint-theme':(
+    'head-color':#5E454B,
+    'main-color':#C9FDD7,
+    'box-color':#FDFFE7,
+    'line-color':#8C7676,
+    'aside-color':#58433A,
+    'btn-color':#99F0CA,
+    'font-color':#58433A),
 )

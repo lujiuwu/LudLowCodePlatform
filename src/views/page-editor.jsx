@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject, ref } from 'vue'
+import { computed, defineComponent, inject, ref, Transition, onMounted } from 'vue'
 // element-plus布局组件
 import { ElHeader, ElAside, ElMain, ElContainer, ElRow } from 'element-plus'
 // 导入单个组件
@@ -14,6 +14,7 @@ import { $dropdown, DropDownItem } from '@/components/editor/DropDown'
 // 导入组件
 import EditorOperator from '@/components/operator/editor-operator'
 import ThemeSelect from '@/components/editor/ThemeSelect'
+import BlockTab from '@/components/editor/BlockTab'
 
 export default defineComponent({
   props: {
@@ -124,8 +125,6 @@ export default defineComponent({
         }
       }
     ]
-
-    const componentList = inject('config').componentList
     // 渲染页面ref
     const containerRef = ref(null)
     // 新建组件
@@ -134,29 +133,72 @@ export default defineComponent({
     const { BlockMouseDown, BlocksObj, OuterMouseDown, LastSelectedBlock, ClearBlockFocus } = useFocus(data, isPreview, menuShow, (e) => {
       InnerMouseDown(e)
     })
+    // tab栏信息
+    const currentTab = ref('basicComponent')
+    const componentList = computed(() => {
+      console.log(currentTab.value)
+      return inject('config').componentList[currentTab.value] || []
+    })
+    // 打开/收起左侧边栏
+    const isOpenAside = ref(true)
+    const tabsRef = ref(null) // 用于引用 component-aside__row__tabs 元素
+    const asideWidth = ref('280px') // 初始宽度
+    // 计算 ElAside 收起时的宽度
+    const collapsedWidth = computed(() => {
+      return tabsRef.value ? tabsRef.value.offsetWidth + 'px' : '60px'
+    })
+
+    // 动态更新 asideWidth
+    const updateAsideWidth = () => {
+      asideWidth.value = isOpenAside.value ? '280px' : collapsedWidth.value
+    }
+
+    onMounted(() => {
+      // 初始化宽度
+      updateAsideWidth()
+    })
+
     const { InnerMouseDown, markLine } = useBlockDrag(BlocksObj, LastSelectedBlock, containerRef)
     return () => (
       <div id="pageEditor">
         <ElContainer class="outer-content main-color">
-          <ElAside v-show={menuShow.value} width="250px" class="outer-content__component-aside aside-color">
-            {componentList.map(component => (
-              <div
-                class="outer-content__component-aside__item"
-              >
-                <div class="outer-content__component-aside__item__label">
-                  {component.label}
-                </div>
-                <div
-                  class="outer-content__component-aside__item__component"
-                  draggable
-                  onDragstart={e => DragFunction(e, component)}
-                  onDragend={e => DragEndFunction(e, component)}
+         <ElAside v-show={menuShow.value} style={{ transition: 'width 0.3s ease' }} width={asideWidth.value} class="outer-content__component-aside aside-color">
+        {/* 添加tab栏 */}
+        <div class='component-aside__row'>
+          <div class='component-aside__row__tabs'>
+            <BlockTab
+            v-model:currentTab={currentTab.value}
+            v-model:isOpenAside={isOpenAside.value}
+              onUpdate:isOpenAside={(newValue) => {
+                isOpenAside.value = newValue
+                updateAsideWidth()
+              }}
                 >
-                  {component.preview()}
+            </BlockTab>
+          </div>
+          <Transition name='slide'>
+            <div class='component-aside__row__components' v-show={isOpenAside.value}>
+              {componentList.value.map(component => (
+                <div
+                  class="component-aside__row__components__item"
+                >
+                  <div
+                    class="component-aside__row__components__item__component"
+                    draggable
+                    onDragstart={(e) => DragFunction(e, component)}
+                    onDragend={(e) => DragEndFunction(e, component)}
+                  >
+                    {component.preview()}
+                  </div>
+                  <div class="component-aside__row__components__item__label">
+                    {component.label}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </ElAside>
+              ))}
+            </div>
+          </Transition>
+        </div>
+         </ElAside>
           <ElContainer class="inner-content box-color">
             <ElHeader v-show={menuShow.value} class="inner-content__header" height="45px">
               {/* 菜单区域 */}
@@ -197,7 +239,7 @@ export default defineComponent({
               </div>
             </ElMain>
           </ElContainer>
-          <ElAside v-show={menuShow.value} width="250px" class='outer-content__operator-aside aside-color'>
+          <ElAside v-show={menuShow.value} width="220px" class='outer-content__operator-aside aside-color'>
             <EditorOperator
               class='outer-content__operator-aside__form'
               block={LastSelectedBlock.value}

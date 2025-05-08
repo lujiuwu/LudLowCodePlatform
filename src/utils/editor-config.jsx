@@ -1,16 +1,26 @@
 // 导入渲染组件
-import { ElButton, ElInput, ElSelect, ElOption, ElSwitch, ElRate } from 'element-plus'
+import { ElButton, ElInput, ElSelect, ElOption, ElSwitch, ElRate, ElHeader, ElAside } from 'element-plus'
 // 组件列表
 // 建立映射关系
 function createEditionConfig () {
   // 组件列表
-  const componentList = []
+  const componentList = {
+    basicComponent: [],
+    pageContainer: [],
+    feedBack: []
+  }
   const componentMap = new Map()
   return {
     componentList,
     componentMap,
     register: (component) => {
-      componentList.push(component)
+      if (component.type === 'basic') {
+        componentList.basicComponent.push(component)
+      } else if (component.type === 'page') {
+        componentList.pageContainer.push(component)
+      } else {
+        componentList.feedBack.push(component)
+      }
       componentMap.set(component.key, component)
     }
   }
@@ -30,7 +40,8 @@ const createTable = (label, table) => ({ type: 'table', label, table })
 registerConfig.register({
   label: '文本',
   key: 'text',
-  preview: () => <span>预览文本</span>,
+  type: 'basic',
+  preview: () => <span class='preview'>预览文本</span>,
   render: (renderProps) => {
     if (renderProps && Object.keys(renderProps.props).length !== 0) return <span style={{ color: renderProps.props.color, fontSize: renderProps.props.size + 'px' }}>{renderProps.props.text}</span>
     else return <span>默认内容</span>
@@ -48,7 +59,8 @@ registerConfig.register({
 registerConfig.register({
   label: '按钮',
   text: '按钮',
-  preview: () => <ElButton>预览按钮</ElButton>,
+  type: 'basic',
+  preview: () => <ElButton class='preview'>预览按钮</ElButton>,
   render: (renderProps) => {
     if (renderProps && Object.keys(renderProps.props).length !== 0) {
       return <ElButton style={Object.keys(renderProps.size).length !== 0 ? { height: renderProps.size.height + 'px', width: renderProps.size.width + 'px' } : {}} type={renderProps.props.type} size={renderProps.props.size}>{renderProps.props.text}</ElButton>
@@ -82,7 +94,8 @@ registerConfig.register({
 registerConfig.register({
   label: '输入框',
   text: '输入框',
-  preview: () => <ElInput placeholder="预览输入框"></ElInput>,
+  type: 'basic',
+  preview: () => <ElInput class='preview' placeholder="预览输入框"></ElInput>,
   render: (renderProps) => {
     if (renderProps) {
       return (
@@ -118,7 +131,8 @@ registerConfig.register({
 registerConfig.register({
   label: '下拉框',
   text: '下拉框',
-  preview: () => <ElSelect placeholder="请选择" style="width: 100%"></ElSelect>,
+  type: 'basic',
+  preview: () => <ElSelect class='preview' placeholder="请选择" style="width: 100%"></ElSelect>,
   render: (renderProps) => {
     if (renderProps && Object.keys(renderProps.props).length !== 0 && Object.keys(renderProps.model).length !== 0) {
       return (
@@ -166,11 +180,12 @@ registerConfig.register({
     default: '绑定数据' // 默认值设为空字符串
   }
 })
-// 按钮
+// 开关
 registerConfig.register({
   label: '开关',
   key: 'switch',
-  preview: () => <ElSwitch />,
+  type: 'basic',
+  preview: () => <ElSwitch class='preview' />,
   render: () => {
     return <ElSwitch />
   },
@@ -180,11 +195,41 @@ registerConfig.register({
 // 评分
 registerConfig.register({
   label: '评分',
+  type: 'basic',
   key: 'rate',
-  preview: () => <ElRate />,
+  preview: () => <ElRate class='preview' />,
   render: () => {
     return <ElRate />
   },
   props: {
+  }
+})
+
+// 布局
+registerConfig.register({
+  label: '头部',
+  type: 'page',
+  preview: () => <ElHeader style={{ width: '100%', backgroundColor: '#ccd9e6' }} height={'30px'}>头部</ElHeader>,
+  render: () => {
+    return <ElHeader style={{ width: '900px', backgroundColor: '#ccd9e6' }} height={'40px'}>头部</ElHeader>
+  },
+  // 伸缩选项
+  resize: {
+    width: true,
+    height: true
+  }
+})
+// 布局
+registerConfig.register({
+  label: '侧边栏',
+  type: 'page',
+  preview: () => <ElAside style={{ height: '100%', backgroundColor: '#ccd9e6' }} width={'100px'}>侧边栏</ElAside>,
+  render: () => {
+    return <ElAside style={{ height: '900px', backgroundColor: '#ccd9e6' }} width={'100px'}>侧边栏</ElAside>
+  },
+  // 伸缩选项
+  resize: {
+    width: true,
+    height: true
   }
 })

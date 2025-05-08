@@ -4,27 +4,5 @@
     "height":600
   },
   "blocks":[
-    {
-      "key":"button",
-      "top":30,
-      "left":30,
-      "zIndex":2,
-      "props":{
-        "text":"按钮文本",
-        "type":"primary",
-        "size":"default"
-      }
-    },
-     {
-      "key":"text",
-      "top":60,
-      "left":60,
-      "zIndex":1,
-      "props":{
-        "text":"我的文本",
-        "color":"pink",
-        "size":16
-      }
-    }
   ]
 }

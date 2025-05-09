@@ -42,6 +42,16 @@ Mobile Page Builder&Generator with Drag&Drop
 
 <img src="https://p.sda1.dev/24/3ffae1ecc4b60c194a8aa951f9113283/Snipaste_2025-05-08_21-41-10.jpg" style="margin: 10px;" width="60%" />
 
+#### 马上开始
+
+```shell
+# git clone https://github.com/lujiuwu/LudLowCodePlatform.git
+# cd lud
+
+# npm run serve 
+# npm run build
+```
+
 #### 更多说明
 
 ##### 前端组件说明

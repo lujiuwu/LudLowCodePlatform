@@ -14,7 +14,7 @@ export default defineComponent({
     const currentTheme = ref('default-theme')
     return () => {
       return (
-        <ElCol span={3} offset={3}>
+        <ElCol span={4} offset={20}>
           <ElSelect
             v-model={currentTheme.value}
             onChange={changeTheme}

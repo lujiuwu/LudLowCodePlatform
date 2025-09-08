@@ -132,37 +132,8 @@
     // 主体区域
     .inner-content {
       @include mixins.get-bg-color('main-color');
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       &__header {
         @include mixins.get-bg-color('head-color');
-        width: 100%;
-        &__menu{
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          &__btn {
-            @include mixins.get-bg-color('btn-color');
-              width: 100%;
-              text-align: center;
-              box-sizing: border-box;
-              @include mixins.get-border(1px, solid, "head-color");
-              cursor: pointer;
-              &:hover{
-                @include mixins.get-bg-color('main-color');
-              }
-          }
-          &__select {
-            background-color: pink;
-          }
-        }
-        &__theme-select{
-          background-color: pink;
-        }
-        
       }
       &__main {
         position: relative;

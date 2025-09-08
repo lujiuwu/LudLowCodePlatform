@@ -1,6 +1,6 @@
-import { computed, defineComponent, inject, ref, Transition, onMounted } from 'vue'
-import { ElHeader, ElAside, ElMain, ElContainer, ElRow } from 'element-plus'
-import { BlockMenuBtns, BlockEditor, BlockTab, ThemeSelection, EditorOperator } from '@/components'
+import { computed, defineComponent, inject, ref, onMounted } from 'vue'
+import { ElContainer } from 'element-plus'
+import { Header, Main, ComponentsAside, ActionAside } from '@/components'
 import { useMenuDragger, useFocus, useBlockDrag, useCommand } from '@/composables'
 import { $dialog } from '@/components/Dialog'
 import { $dropdown, DropDownItem } from '@/components/DropDown'
@@ -60,12 +60,7 @@ export default defineComponent({
       }
     })
     // 渲染页面宽高
-    const pageStyle = computed(() => (
-      {
-        width: data.value.container.width + 'px',
-        height: data.value.container.height + 'px'
-      }
-    ))
+
     // 获取命令
     const { commandsMap } = useCommand(data)
     // 菜单按钮信息
@@ -151,93 +146,36 @@ export default defineComponent({
     return () => (
       <div id="pageEditor">
         <ElContainer class="outer-content main-color">
-         <ElAside
-           v-show={menuShow.value}
-           style={{ transition: 'width 0.3s ease' }}
-           width={asideWidth.value}
-           class="outer-content__component-aside aside-color"
-         >
-        <div class='component-aside__row'>
-          <div class='component-aside__row__tabs'>
-            <BlockTab
-            v-model:currentTab={currentTab.value}
-            v-model:isOpenAside={isOpenAside.value}
-              onUpdate:isOpenAside={(newValue) => {
-                isOpenAside.value = newValue
-                updateAsideWidth()
-              }}
-                >
-            </BlockTab>
-          </div>
-          <Transition name='slide'>
-            <div class='component-aside__row__components' v-show={isOpenAside.value}>
-              {componentList.value.map(component => (
-                <div
-                  class="component-aside__row__components__item"
-                >
-                  <div
-                    class="component-aside__row__components__item__component"
-                    draggable
-                    onDragstart={(e) => DragFunction(e, component)}
-                    onDragend={(e) => DragEndFunction(e, component)}
-                  >
-                    {component.preview()}
-                  </div>
-                  <div class="component-aside__row__components__item__label">
-                    {component.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Transition>
-        </div>
-         </ElAside>
-          <ElContainer class="inner-content box-color">
-            <ElHeader v-show={menuShow.value} class="inner-content__header" height="45px">
-              {/* 菜单区域 */}
-              <ElRow class='inner-content__header__menu'>
-                {
-                 menuBtns.map(btnInfo => (
-                     <BlockMenuBtns class='inner-content__header__menu__btn' btnInfo={btnInfo}></BlockMenuBtns>
-                 ))
-                }
-              {/* 换肤按钮 -- 单独 */}
-              <ThemeSelection class='inner-content__header__theme-select'></ThemeSelection>
-              </ElRow>
-            </ElHeader>
-            <ElMain>
-              <div
-                class="inner-content__main"
-                style={pageStyle.value}
-                ref={containerRef}
-                onMousedown={OuterMouseDown}
-              >
-                {
-                  (data.value.blocks.map((block, index) => (
-                    <BlockEditor
-                      formData = {props.formData}
-                      block={block}
-                      onMousedown={e => BlockMouseDown(e, block, index)}
-                      class={['inner-content__main__block', block.focus ? 'inner-content__main__item--focus' : 'inner-content__main__item']}
-                      onContextmenu = {e => onContextMenuBlock(e, block)}
-                    ></BlockEditor>
-                  )
-                  ))
-                }
-              {markLine.x !== null && <div class="inner-content__main__line-X" style={{ left: markLine.x + 'px' }}></div>}
-              {markLine.y !== null && <div class="inner-content__main__line-Y" style={{ top: markLine.y + 'px' }}></div>}
-              </div>
-            </ElMain>
+          <ComponentsAside
+            v-show={menuShow.value}
+            width={asideWidth.value}
+            isOpenAside={isOpenAside.value}
+            componentList={componentList.value}
+            DragFunction={DragFunction}
+            DragEndFunction={DragEndFunction}
+          >
+          </ComponentsAside>
+          <ElContainer class="inner-content box-color flex flex-col">
+            <Header v-show={menuShow.value} btnContent={menuBtns}></Header>
+            <Main
+              modelValue={data.value}
+              formData={props.formData}
+              isPreview={isPreview.value}
+              menuShow={menuShow.value}
+              onContextMenuBlock={onContextMenuBlock}
+              containerRef={containerRef}
+              OuterMouseDown={OuterMouseDown}
+              BlockMouseDown={BlockMouseDown}
+              markLine={markLine}>
+            </Main>
           </ElContainer>
-          <ElAside v-show={menuShow.value} width="220px" class='outer-content__operator-aside aside-color'>
-            <EditorOperator
-              class='outer-content__operator-aside__form'
-              block={LastSelectedBlock.value}
-              v-model:data={data.value}
-              updateContainer={commandsMap.get('updateContainer')}
-              updateBlock={commandsMap.get('updateBlock')}
-            ></EditorOperator>
-          </ElAside>
+          <ActionAside
+            v-show={menuShow.value}
+            LastSelectedBlock={LastSelectedBlock.value}
+            v-model:data={data.value}
+            updateContainer={commandsMap.get('updateContainer')}
+            updateBlock={commandsMap.get('updateBlock')}
+          ></ActionAside>
         </ElContainer>
       </div>
     )

@@ -31,7 +31,6 @@ export default defineComponent({
         height: data.value.container.height + 'px'
       }
     ))
-    console.log(pageStyle)
     return () => (
       <ElMain>
         <div

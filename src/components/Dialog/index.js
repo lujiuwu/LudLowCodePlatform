@@ -1,1 +1,1 @@
-export { default as Dialog } from './Component.jsx'
+export { $dialog as Dialog } from './Component.jsx'

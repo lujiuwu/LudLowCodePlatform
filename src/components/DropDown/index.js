@@ -1,1 +1,1 @@
-export { default as DropDown } from './Component.jsx'
+export { $dropdown as DropDown, DropDownItem } from './Component.jsx'

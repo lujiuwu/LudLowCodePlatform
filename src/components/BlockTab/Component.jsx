@@ -30,7 +30,6 @@ export default defineComponent({
     }
     function changeOpen () {
       isOpenAside.value = !isOpenAside.value
-      console.log(isOpenAside.value)
     }
     return () => (
       <>

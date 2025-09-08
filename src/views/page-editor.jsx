@@ -2,8 +2,8 @@ import { computed, defineComponent, inject, ref, onMounted } from 'vue'
 import { ElContainer } from 'element-plus'
 import { Header, Main, ComponentsAside, ActionAside } from '@/components'
 import { useMenuDragger, useFocus, useBlockDrag, useCommand } from '@/composables'
-import { $dialog } from '@/components/Dialog'
-import { $dropdown, DropDownItem } from '@/components/DropDown'
+import { Dialog as $dialog } from '@/components/Dialog'
+import { DropDown as $dropdown, DropDownItem } from '@/components/DropDown'
 
 export default defineComponent({
   props: {
@@ -120,7 +120,6 @@ export default defineComponent({
     // tab栏信息
     const currentTab = ref('basicComponent')
     const componentList = computed(() => {
-      console.log(currentTab.value)
       return inject('config').componentList[currentTab.value] || []
     })
     // 打开/收起左侧边栏

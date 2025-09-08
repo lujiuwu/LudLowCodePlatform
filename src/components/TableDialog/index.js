@@ -1,1 +1,1 @@
-export { default as TableDialog } from './Component.jsx'
+export { $tableDialog as TableDialog } from './Component.jsx'

@@ -1,6 +1,6 @@
 import { defineComponent, inject, watch, reactive } from 'vue'
 import { ElForm, ElFormItem, ElInputNumber, ElButton, ElInput, ElSelect, ElOption, ElColorPicker } from 'element-plus'
-import TableEditor from '@/components/editor/table-editor'
+import TableEditor from '@/components/TableEditor'
 
 export default defineComponent({
   props: {

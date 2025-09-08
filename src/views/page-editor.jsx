@@ -1,20 +1,9 @@
 import { computed, defineComponent, inject, ref, Transition, onMounted } from 'vue'
-// element-plus布局组件
 import { ElHeader, ElAside, ElMain, ElContainer, ElRow } from 'element-plus'
-// 导入单个组件
-import EditorBlock from '@/components/editor/editor-block'
-import EditorMenuBtn from '@/components/editor/editor-menu-btn'
-// 导入方法
-import { useMenuDragger } from '@/hooks/useMenuDragger'
-import { useFocus } from '@/hooks/useFocus'
-import { useBlockDrag } from '@/hooks/useBlockDrag'
-import { useCommand } from '@/hooks/useCommand'
-import { $dialog } from '@/components/editor/Dialog'
-import { $dropdown, DropDownItem } from '@/components/editor/DropDown'
-// 导入组件
-import EditorOperator from '@/components/operator/editor-operator'
-import ThemeSelect from '@/components/editor/ThemeSelect'
-import BlockTab from '@/components/editor/BlockTab'
+import { BlockMenuBtns, BlockEditor, BlockTab, ThemeSelection, EditorOperator } from '@/components'
+import { useMenuDragger, useFocus, useBlockDrag, useCommand } from '@/composables'
+import { $dialog } from '@/components/Dialog'
+import { $dropdown, DropDownItem } from '@/components/DropDown'
 
 export default defineComponent({
   props: {
@@ -162,8 +151,12 @@ export default defineComponent({
     return () => (
       <div id="pageEditor">
         <ElContainer class="outer-content main-color">
-         <ElAside v-show={menuShow.value} style={{ transition: 'width 0.3s ease' }} width={asideWidth.value} class="outer-content__component-aside aside-color">
-        {/* 添加tab栏 */}
+         <ElAside
+           v-show={menuShow.value}
+           style={{ transition: 'width 0.3s ease' }}
+           width={asideWidth.value}
+           class="outer-content__component-aside aside-color"
+         >
         <div class='component-aside__row'>
           <div class='component-aside__row__tabs'>
             <BlockTab
@@ -205,11 +198,11 @@ export default defineComponent({
               <ElRow class='inner-content__header__menu'>
                 {
                  menuBtns.map(btnInfo => (
-                     <EditorMenuBtn class='inner-content__header__menu__btn' btnInfo={btnInfo}></EditorMenuBtn>
+                     <BlockMenuBtns class='inner-content__header__menu__btn' btnInfo={btnInfo}></BlockMenuBtns>
                  ))
                 }
               {/* 换肤按钮 -- 单独 */}
-              <ThemeSelect class='inner-content__header__theme-select'></ThemeSelect>
+              <ThemeSelection class='inner-content__header__theme-select'></ThemeSelection>
               </ElRow>
             </ElHeader>
             <ElMain>
@@ -219,21 +212,18 @@ export default defineComponent({
                 ref={containerRef}
                 onMousedown={OuterMouseDown}
               >
-
-                {/* 此处渲染单个组件 */}
                 {
                   (data.value.blocks.map((block, index) => (
-                    <EditorBlock
+                    <BlockEditor
                       formData = {props.formData}
                       block={block}
                       onMousedown={e => BlockMouseDown(e, block, index)}
                       class={['inner-content__main__block', block.focus ? 'inner-content__main__item--focus' : 'inner-content__main__item']}
                       onContextmenu = {e => onContextMenuBlock(e, block)}
-                    ></EditorBlock>
+                    ></BlockEditor>
                   )
                   ))
                 }
-                {/* 渲两根线 */}
               {markLine.x !== null && <div class="inner-content__main__line-X" style={{ left: markLine.x + 'px' }}></div>}
               {markLine.y !== null && <div class="inner-content__main__line-Y" style={{ top: markLine.y + 'px' }}></div>}
               </div>

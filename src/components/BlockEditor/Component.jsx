@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject, onMounted, ref } from 'vue'
-import BlockResize from './block-resize'
+import BlockResize from '../BlockResize'
 
 // 渲染单个组件
 export default defineComponent({

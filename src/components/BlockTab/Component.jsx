@@ -21,8 +21,8 @@ export default defineComponent({
       set (newValue) { ctx.emit('update:isOpenAside', newValue) }
     })
     const blockTypes = [
-      { label: '基础组件', name: 'basicComponent', icon: () => <Folder /> },
-      { label: '布局容器', name: 'pageContainer', icon: () => <Menu /> },
+      { label: '基础组件', name: 'basic', icon: () => <Folder /> },
+      { label: '布局容器', name: 'layout', icon: () => <Menu /> },
       { label: '反馈组件', name: 'feedBack', icon: () => <BellFilled /> }
     ]
     function handleClick (e) {
@@ -33,35 +33,28 @@ export default defineComponent({
     }
     return () => (
       <>
-        <div class='tabs-area'>
+      <div class='tabs-area'>
           <ElTabs tab-position="left" onTabChange={handleClick}>
           {blockTypes.map(block => (
             <ElTabPane
               key={block.name}
               label={(
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  boxSizing: 'border-box'
-                }}>
+                <div class='flex flex-col'>
                   <ElIcon>{block.icon()}</ElIcon>
-                  <span>{block.label}</span>
+                  <div class='label'>{block.label}</div>
                 </div>
               )}
             >
             </ElTabPane>
           ))}
         </ElTabs>
-        </div>
-
         <div class='icon-area'>
            <ElIcon onClick={changeOpen} size='25'>
           <Fold v-show={isOpenAside.value}></Fold>
           <Expand v-show={!isOpenAside.value}></Expand>
         </ElIcon>
         </div>
-
+        </div>
       </>
     )
   }

@@ -9,13 +9,11 @@ export default defineComponent({
     updateBlock: { type: Function },
     LastSelectedBlock: { type: Object }
   },
-  setup (props) {
+  setup (props, { attrs }) {
     return () => (
       <ElAside
-        width="220px"
-        class='outer-content__operator-aside aside-color'>
+        class={['outer-content__operator-aside', 'aside-color', attrs.class]}>
         <EditorOperator
-          class='outer-content__operator-aside__form'
           block={props.LastSelectedBlock}
           v-model:data={props.data}
           updateContainer={props.updateContainer}

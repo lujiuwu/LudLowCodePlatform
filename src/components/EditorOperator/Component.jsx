@@ -32,7 +32,7 @@ export default defineComponent({
       if (!props.block) {
         container.push(
           <ElFormItem >
-            <span class='label'>容器宽度</span>
+            <span class='label mr-10px'>容器宽度</span>
           <ElInputNumber
             v-model={state.editData.width}
             step={5}
@@ -41,7 +41,7 @@ export default defineComponent({
         )
         container.push(
           <ElFormItem>
-            <span class='label'>容器高度</span>
+            <span class='label mr-10px'>容器高度</span>
           <ElInputNumber
             v-model={state.editData.height}
             step={5}
@@ -54,7 +54,7 @@ export default defineComponent({
           container.push(
             Object.entries(component.props).map(([propName, propConfig]) => {
               return <ElFormItem >
-                <span class='label'>{propConfig.label}</span>
+                <span class='label mr-10px'>{propConfig.label}</span>
                 {{
                   input: () => <ElInput v-model={state.editData.props[propName]}></ElInput>,
                   color: () => <ElColorPicker v-model={state.editData.props[propName]}></ElColorPicker>,

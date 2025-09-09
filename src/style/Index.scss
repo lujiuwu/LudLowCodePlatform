@@ -6,9 +6,9 @@
       margin: 0;
   /* 减小滚动条宽度 */
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 5px;
       /* 调整滚动条宽度 */
-      height: 7px;
+      height: 5px;
       /* 水平滚动条高度（如有需要） */
     }
   
@@ -19,7 +19,7 @@
   
     /* 滚动条滑块 */
     ::-webkit-scrollbar-thumb {
-      background: #888;
+      background: #bfbfbf;
       border-radius: 4px;
     }
   
@@ -38,105 +38,84 @@
 #pageEditor{
   height: 100vh;
   box-sizing: border-box;
-
   .outer-content {
     height: 100%;
     // 左侧边栏 -- 拖拽组件
     &__component-aside {
-      overflow-y: scroll !important;
+      height: 100vh;
       padding: 10px 10px 0 0;
       @include mixins.get-bg-color('aside-color');
       .component-aside__row{
-        height: 96vh;
+        height: 100%;
         margin: 0;
         padding: 0;
         flex-wrap: nowrap;
         width: 100%;
         display: flex;
         overflow: hidden;
-          /* 确保动画效果正常 */
         &__tabs{
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          .tabs-area{
-            flex: 16;
-            /* 减小 padding 并保持竖排 */
-              .el-tabs__item {
-                writing-mode: vertical-rl;
-                text-orientation: mixed;
-                height: auto;
-                /* 高度自适应 */
-                line-height: 1.3;
-                /* 更紧凑的行高 */
-                padding: 8px 9px !important;
-                /* 大幅减小 padding（上下 4px，左右 2px） */
-                margin: 5px 0 !important;
-                /* 移除默认 margin */
-                min-width: unset;
-                /* 取消最小宽度限制 */
-              }
-          }
+          height: 100%;
+          position: relative;
           .icon-area{
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
           }
-       
+          .tabs-area .el-tabs__item {
+            font-size: 17px;
+            padding: 10px;
+            height: auto !important;
+            display: flex !important;
+            flex-direction: column;
+            .el-icon {
+              display: flex;
+              justify-content: center;
+              margin-bottom: 5px;
+              width: 100%;
+            }
+            .label {
+              writing-mode: vertical-rl;
+              transform: rotate(360deg);
+            }
+          }
         }
         &__components{
-          flex: 5;
+          overflow-y: scroll !important;
+          flex: 4;
           transition: all 0.3s ease;
-          /* 添加过渡动画 */
-          max-height: 1000px;
-          /* 一个足够大的值，确保内容能完全显示 */
           overflow: hidden;
-          /* 确保动画效果正常 */
           &__item {
-            margin-bottom: 10px;
-            height: 80px;
             @include mixins.get-bg-color('block-color');
-            @include mixins.get-border(2px, dashed, "border-color");
-            position: relative;
-            box-sizing: border-box;
-            padding-top: 40px;
-            border-radius: 10px 0 0 0;
-        
             &__label {
-              border-radius: 10px 0 0 0;
-              margin-bottom: 5px;
-              position: absolute;
-              padding: 2px;
-              top: 0;
-              left: 0;
-              width: 30%;
               @include mixins.get-bg-color('btn-color');
               @include mixins.get-font-color('font-color');
-              text-align: center;
             }
-        
-            &__component {
-              width: 100%;
-              height: 100%;
-              padding: 0 10px;
-              
-            }
-            }
+          }
         }
         
       }
-      
     }
     // 主体区域
     .inner-content {
       @include mixins.get-bg-color('main-color');
       &__header {
         @include mixins.get-bg-color('head-color');
+        height: auto !important; // 覆盖Element Plus默认高度
+        min-height: auto !important; // 移除最小高度限制
+        padding: 8px 0; // 保持上下内边距
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        
+        // 确保子元素能够正常布局
+        .el-row {
+          flex: 1;
+          margin: 0;
+        }
       }
       &__main {
         position: relative;
+        margin: 0 auto;
         overflow: scroll;
         @include mixins.get-bg-color('box-color');
       
@@ -216,25 +195,16 @@
           }
            }
         }
-        
-      
       }
       
     }
     // 右侧边栏 -- 操作组件
     &__operator-aside{
       @include mixins.get-bg-color('aside-color');
-      &__form{
-        padding: 30px;
-        .label{
-          @include mixins.get-font-color('btn-color');
-        }
-        
-      }
+      padding: 50px 20px;
     }
   }
 }
-
 // 取消默认动画
 .el-button,
 .el-input {
@@ -271,4 +241,29 @@
 .slide-leave-to {
   max-height: 0;
   opacity: 0;
+}
+
+.theme-select-dropdown {
+  .el-select-dropdown__item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// 响应式设计
+@media (max-width: 1520px) {
+  #pageEditor {
+    .outer-content {
+      height: calc(100vh - 20vh);
+    }
+    .outer-content__component-aside {
+      height: calc(100vh - 20vh);
+    }
+    .mobile-action-aside {
+      width: 100%;
+      height: 20vh;
+      padding:10px 50px;
+    }
+  }
 }

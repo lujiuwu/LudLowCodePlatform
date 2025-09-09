@@ -11,9 +11,9 @@ export default defineComponent({
   },
   setup (props) {
     return () => (
-      <ElHeader class={'w-100% flex flex-col inner-content__header'} height="9vh">
-        <OperationMenu class={'flex-1'} btnContent={props.btnContent} />
-        <ElRow class={'flex-1 flex items-center'}>
+      <ElHeader class={'w-full inner-content__header flex flex-col gap-8px'}>
+        <OperationMenu btnContent={props.btnContent} />
+        <ElRow class={'flex items-center'}>
           <ThemeSelection />
         </ElRow>
       </ElHeader>

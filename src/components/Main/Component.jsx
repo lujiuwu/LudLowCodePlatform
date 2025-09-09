@@ -32,12 +32,13 @@ export default defineComponent({
       }
     ))
     return () => (
-      <ElMain>
+      <ElMain class='overflow-scroll'>
         <div
           class={['inner-content__main']}
           style={pageStyle.value}
           ref={props.containerRef}
           onMousedown={props.OuterMouseDown}
+          onTouchstart={props.OuterMouseDown}
         >
           {
             (data.value.blocks.map((block, index) => (
@@ -45,6 +46,7 @@ export default defineComponent({
                 formData = {props.formData}
                 block={block}
                 onMousedown={e => props.BlockMouseDown(e, block, index)}
+                onTouchstart={e => props.BlockMouseDown(e, block, index)}
                 class={['inner-content__main__block', block.focus ? 'inner-content__main__item--focus' : 'inner-content__main__item']}
                 onContextmenu = {e => props.onContextMenuBlock(e, block)}
               ></BlockEditor>

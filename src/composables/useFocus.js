@@ -13,12 +13,20 @@ export function useFocus (data, isPreview, menuShow, callback) {
   function BlockMouseDown (e, block, index) {
     if (isPreview.value) return
 
+    // 支持触摸事件和鼠标事件
+    const isTouch = e.type === 'touchstart'
+
     // 阻止默认效果
     e.preventDefault()
     e.stopPropagation()
+
+    // 对于触摸事件，检查是否是多点触控（忽略多点触控）
+    if (isTouch && e.touches.length > 1) {
+      return
+    }
     // 1. 不按shift 每次点击前要清空之前的效果
-    // 2. 判断shift 实现多选
-    if (e.shiftKey) {
+    // 2. 判断shift 实现多选（触摸事件不支持shift键）
+    if (!isTouch && e.shiftKey) {
       // 如果只选择一个，不改变状态
       if (BlocksObj.value.focusBlocks.length <= 1) block.focus = true
       else block.focus = !block.focus

@@ -8,8 +8,7 @@ export default defineComponent({
     // 皮肤主题
     const themesOption = [
       { value: 'default-theme', label: '默认主题' },
-      { value: 'dark-theme', label: '暗色主题' },
-      { value: 'candy-theme', label: '柔和主题' }
+      { value: 'mint-theme', label: '薄荷主题' }
     ]
     const currentTheme = ref('default-theme')
     return () => {

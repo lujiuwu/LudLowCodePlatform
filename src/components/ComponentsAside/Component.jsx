@@ -1,17 +1,18 @@
-import { Transition, defineComponent, ref } from 'vue'
+import { Transition, defineComponent } from 'vue'
 import { ElAside } from 'element-plus'
-import { BlockTab } from '@/components'
+import { BlockTab, PreviewComponent } from '@/components'
 
 export default defineComponent({
   props: {
     width: { type: String },
     isOpenAside: { type: Boolean },
+    currentTab: { type: String },
     DragFunction: { type: Function },
     DragEndFunction: { type: Function },
     componentList: { type: Array }
   },
-  setup (props) {
-    const currentTab = ref('basicComponent')
+  emits: ['update:isOpenAside', 'update:currentTab'],
+  setup (props, { emit }) {
     return () => (
       <ElAside
         style={{ transition: 'width 0.3s ease' }}
@@ -21,29 +22,25 @@ export default defineComponent({
         <div class='component-aside__row'>
           <div class='component-aside__row__tabs'>
             <BlockTab
-              v-model:currentTab={currentTab}
-              v-model:isOpenAside={props.isOpenAside}
+              currentTab={props.currentTab}
+              isOpenAside={props.isOpenAside}
+              onUpdate:currentTab={(value) => {
+                emit('update:currentTab', value)
+              }}
+              onUpdate:isOpenAside={(value) => {
+                emit('update:isOpenAside', value)
+              }}
             >
             </BlockTab>
-          </div>
+            </div>
           <Transition name='slide'>
             <div class='component-aside__row__components' v-show={props.isOpenAside}>
               {props.componentList.map(component => (
-                <div
-                  class="component-aside__row__components__item"
-                >
-                  <div
-                    class="component-aside__row__components__item__component"
-                    draggable
+                  <PreviewComponent
+                    component={component}
                     onDragstart={(e) => props.DragFunction(e, component)}
                     onDragend={(e) => props.DragEndFunction(e, component)}
-                  >
-                    {component.preview()}
-                  </div>
-                  <div class="component-aside__row__components__item__label">
-                    {component.label}
-                  </div>
-                </div>
+                  ></PreviewComponent>
               ))}
             </div>
           </Transition>

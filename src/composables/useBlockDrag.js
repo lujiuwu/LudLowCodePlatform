@@ -13,7 +13,18 @@ export function useBlockDrag (BlocksObj, LastSelectedBlock, containerRef) {
   })
   // 内部拖拽组件
   function KeyMouseMove (e) {
-    let { clientX: moveX, clientY: moveY } = e
+    // 支持触摸事件和鼠标事件
+    const isTouch = e.type === 'touchmove'
+    let moveX, moveY
+
+    if (isTouch) {
+      e.preventDefault() // 阻止默认的滚动行为
+      moveX = e.touches[0].clientX
+      moveY = e.touches[0].clientY
+    } else {
+      moveX = e.clientX
+      moveY = e.clientY
+    }
     if (!dragState.dragging) {
       dragState.dragging = true
       events.emit('start') // 触发事件
@@ -49,8 +60,12 @@ export function useBlockDrag (BlocksObj, LastSelectedBlock, containerRef) {
     })
   }
   function KeyMouseUp (e) {
+    // 移除鼠标和触摸事件监听器
     document.removeEventListener('mousemove', KeyMouseMove)
     document.removeEventListener('mouseup', KeyMouseUp)
+    document.removeEventListener('touchmove', KeyMouseMove)
+    document.removeEventListener('touchend', KeyMouseUp)
+
     if (dragState.dragging) {
       events.emit('end')
     }
@@ -58,10 +73,22 @@ export function useBlockDrag (BlocksObj, LastSelectedBlock, containerRef) {
     markLine.y = null
   }
   function InnerMouseDown (e) {
+    // 支持触摸事件和鼠标事件
+    const isTouch = e.type === 'touchstart'
+    let startX, startY
+
+    if (isTouch) {
+      e.preventDefault() // 阻止默认的滚动行为
+      startX = e.touches[0].clientX
+      startY = e.touches[0].clientY
+    } else {
+      startX = e.clientX
+      startY = e.clientY
+    }
     const { width: currentBlockWidth, height: currentBlockHeight } = LastSelectedBlock.value
     dragState.dragging = false
-    dragState.startX = e.clientX
-    dragState.startY = e.clientY
+    dragState.startX = startX
+    dragState.startY = startY
     dragState.startPos = BlocksObj.value.focusBlocks.map(({ top, left }) => ({ top, left }))
     dragState.startLeft = LastSelectedBlock.value.left
     dragState.startTop = LastSelectedBlock.value.top
@@ -96,8 +123,11 @@ export function useBlockDrag (BlocksObj, LastSelectedBlock, containerRef) {
       })
       return lines
     })()
+    // 添加鼠标和触摸事件监听器
     document.addEventListener('mousemove', KeyMouseMove)
     document.addEventListener('mouseup', KeyMouseUp)
+    document.addEventListener('touchmove', KeyMouseMove, { passive: false })
+    document.addEventListener('touchend', KeyMouseUp)
   }
   return {
     InnerMouseDown,

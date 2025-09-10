@@ -42,19 +42,11 @@
     height: 100%;
     // 左侧边栏 -- 拖拽组件
     &__component-aside {
+      padding-top: 10px;
       height: 100vh;
-      padding: 10px 10px 0 0;
       @include mixins.get-bg-color('aside-color');
       .component-aside__row{
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        flex-wrap: nowrap;
-        width: 100%;
-        display: flex;
-        overflow: hidden;
         &__tabs{
-          height: 100%;
           position: relative;
           .icon-area{
             position: absolute;
@@ -62,7 +54,7 @@
             right: 10px;
           }
           .tabs-area .el-tabs__item {
-            font-size: 17px;
+            font-size: 16px;
             padding: 10px;
             height: auto !important;
             display: flex !important;
@@ -80,10 +72,7 @@
           }
         }
         &__components{
-          overflow-y: scroll !important;
-          flex: 4;
           transition: all 0.3s ease;
-          overflow: hidden;
           &__item {
             @include mixins.get-bg-color('block-color');
             &__label {
@@ -116,7 +105,7 @@
       &__main {
         position: relative;
         margin: 0 auto;
-        overflow: scroll;
+        overflow: hidden;
         @include mixins.get-bg-color('box-color');
       
         &__item {

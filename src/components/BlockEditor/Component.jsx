@@ -32,6 +32,7 @@ export default defineComponent({
     onMounted(() => {
       const { offsetWidth, offsetHeight } = blockRef.value
       if (currentBlock.value.alignCenter) {
+        // 确保居中计算时使用正确的坐标
         currentBlock.value.left = currentBlock.value.left - offsetWidth / 2
         currentBlock.value.top = currentBlock.value.top - offsetHeight / 2
         currentBlock.value.alignCenter = false

@@ -1,9 +1,13 @@
-import { defineComponent } from 'vue'
+import { defineComponent, inject } from 'vue'
+import { Badge } from '../Badge'
 
 export default defineComponent({
   props: {
     component: {
       type: Object
+    },
+    currentTab: {
+      type: String
     },
     onDragstart: {
       type: Function
@@ -13,14 +17,18 @@ export default defineComponent({
     }
   },
   setup (props) {
+    // 注入isShowDeleteBtn状态
+    const isShowDeleteBtn = inject('isShowDeleteBtn', null)
+
     return () => (
       <>
         <div
           class="component-aside__row__components__item mt-10px flex flex-col"
         >
-        <div class="component-aside__row__components__item__label p-5px">
-          {props.component.label}
-        </div>
+          <div class="component-aside__row__components__item__label p-5px w-full relative">
+            {props.currentTab === 'my' && isShowDeleteBtn?.value && <Badge />}
+            {props.component.label}
+          </div>
         <div
           class="component-aside__row__components__item__component p-25px"
           draggable

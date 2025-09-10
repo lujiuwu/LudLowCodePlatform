@@ -1,4 +1,4 @@
-import { Folder, Menu, BellFilled, Fold, Expand } from '@element-plus/icons-vue'
+import { Folder, Menu, BellFilled, Fold, Expand, User } from '@element-plus/icons-vue'
 import { ElIcon, ElTabPane, ElTabs } from 'element-plus'
 import { computed, defineComponent } from 'vue'
 
@@ -23,7 +23,8 @@ export default defineComponent({
     const blockTypes = [
       { label: '基础组件', name: 'basic', icon: () => <Folder /> },
       { label: '布局容器', name: 'layout', icon: () => <Menu /> },
-      { label: '反馈组件', name: 'feedBack', icon: () => <BellFilled /> }
+      { label: '反馈组件', name: 'feedBack', icon: () => <BellFilled /> },
+      { label: '我的组件', name: 'my', icon: () => <User/> }
     ]
     function handleClick (e) {
       currentTab.value = blockTypes[e].name

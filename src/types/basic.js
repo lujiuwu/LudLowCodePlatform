@@ -1,5 +1,5 @@
 // 导入渲染组件
-import { ElButton, ElInput, ElSelect, ElOption, ElSwitch, ElRate } from 'element-plus'
+import { ElButton, ElInput, ElSelect, ElOption, ElSwitch } from 'element-plus'
 import { createInput, createColor, createSelector, createTable } from './style'
 // 基础组件配置
 export const basicComponents = [
@@ -103,7 +103,7 @@ export const basicComponents = [
         return (
           <ElSelect
             {...renderProps.model.default}
-            style="width: 240px"
+            style="width: 172px"
             placeholder='默认文本'
           >
             {(renderProps.props.options || []).map((option, index) => {
@@ -120,7 +120,7 @@ export const basicComponents = [
         )
       } else {
         return (
-          <ElSelect style="width: 240px" placeholder='默认文本'></ElSelect>
+          <ElSelect style="width: 172px" placeholder='默认文本'></ElSelect>
         )
       }
     },
@@ -151,18 +151,6 @@ export const basicComponents = [
     preview: () => <ElSwitch class='preview' />,
     render: () => {
       return <ElSwitch />
-    },
-    props: {
-    }
-  },
-  // 评分组件
-  {
-    label: '评分',
-    type: 'basic',
-    key: 'rate',
-    preview: () => <ElRate class='preview' style="width: 100%"/>,
-    render: () => {
-      return <ElRate />
     },
     props: {
     }
